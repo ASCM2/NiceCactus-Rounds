@@ -6,12 +6,16 @@ import { winner as computeWinner } from '../../possible-moves';
 
 
 const returnError = (ctx, err) => {
+  // Ces deux lignes en Koa sont similaires à res.status().send() en Express.
   ctx.status = 500;
   ctx.body = { message: `An error occured in the end middleware: ${err.message}` };
 };
 
 const Rounds = mongoose.model('round');
 
+/*
+  Retourne la partie précédant la dernière partie requêtée.
+*/
 const last = async (ctx) => {
   try {
     const saved = await Rounds.find({});
@@ -39,6 +43,9 @@ const last = async (ctx) => {
   }
 };
 
+/*
+  Retourne la partie suivant la dernière partie requêtée.
+*/
 const next = async (ctx) => {
   try {
     const saved = await Rounds.find({});
@@ -66,9 +73,13 @@ const next = async (ctx) => {
   }
 };
 
+/*
+  Effectue une nouvelle partie, stocke le résultat en base de données et
+  renvoie le résultat de cette partie.
+*/
 const play = async (ctx) => {
   try {
-    const { moves } = ctx.request.body;
+    const { moves } = ctx.request.body; // ctx.request.body est similaire à req.body en express.
     const winner = computeWinner(moves);
     const saved = await Rounds.find({});
     let newPosition = 0;
@@ -91,6 +102,9 @@ const play = async (ctx) => {
   }
 };
 
+/*
+  Supprime toutes les parties sauvegardées en base données.
+*/
 const clear = async (ctx) => {
   try {
     const saved = await Rounds.find({});
@@ -107,7 +121,6 @@ const clear = async (ctx) => {
     ctx.status = 200;
     ctx.body = { winner: 'none', moves: [], position: (-1) };
   } catch (err) {
-    console.log(err);
     returnError(ctx, err);
   }
 };

@@ -1,9 +1,23 @@
+/*
+  Nous utilisons Koa au lieu de Express comme framework/librairie pour gérer
+  les requêtes entrantes.
+  Koa a été créé par l'équipe derrière Express et fonctionne de manière très similaire.
+  Si vous connaissez déjà Express, vous n'aurez aucun problème ici avec l'utilisation de Koa.
+*/
 import Koa from 'koa';
 import requestsLogger from 'koa-logger';
+/*
+  Permet de gérer les CORS afin de permettre au front-end d'effectuer des requêtes
+  vers le back-end.
+ */
 import cors from 'koa2-cors';
 
+// Par cette seule ligne, nous rendons nos modèles accesibles partout dans l'application
+// sans avoir à les importer manuellement.
 import './Models';
 import logger from '../logger';
+
+// Router contenant la définiton de nos routes.
 import router from './Router';
 
 
